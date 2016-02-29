@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,30 @@ public class M3LoginActivity extends AppCompatActivity {
         pager.setAdapter(adapter_fragmentStatePager);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(pager);
+        tabLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Log.d("test","click");
+            }
+        });
+//        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+//            @Override
+//            public void onTabSelected(TabLayout.Tab tab) {
+//                Log.d("Test", "Yo");
+//                pager.setCurrentItem(tab.getPosition());
+//            }
+//
+//            @Override
+//            public void onTabUnselected(TabLayout.Tab tab) {
+//
+//            }
+//
+//            @Override
+//            public void onTabReselected(TabLayout.Tab tab) {
+//
+//            }
+//        });
     }
     // Since this is an object collection, use a FragmentStatePagerAdapter,
 // and NOT a FragmentPagerAdapter.
@@ -47,7 +72,7 @@ public class M3LoginActivity extends AppCompatActivity {
         }
         @Override
         public CharSequence getPageTitle(int position) {
-            return "Fragment " + (position + 1);
+            return "" + (position + 1);
         }
     }
     public static class TheAdapter_Fragment extends Fragment {
@@ -60,7 +85,7 @@ public class M3LoginActivity extends AppCompatActivity {
             View rootView = inflater.inflate(
                     R.layout.fragment_collection_object, container, false);
             Bundle args = getArguments();
-            ((TextView) rootView.findViewById(android.R.id.text1)).setText("Bonjour " +
+            ((TextView) rootView.findViewById(android.R.id.text1)).setText("" +
                     Integer.toString(args.getInt(ARG_OBJECT)));
             return rootView;
         }
