@@ -10,7 +10,7 @@ import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Retrofit;
 public class M3LoginActivity extends AppCompatActivity {
-    TokenInterface apiToken;
+    M3Server.TokenInterface apiToken;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,14 +23,14 @@ public class M3LoginActivity extends AppCompatActivity {
                 .client(clientNoToken)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
-        apiToken = retrofitNoToken.create(TokenInterface.class);
-        attemptLogin("eric.test@360learning.com",Hash.md5("eric.test@360learning.com"));
+        apiToken = retrofitNoToken.create(M3Server.TokenInterface.class);
+        attemptLogin("eric.test@360learning.com",M3Server.Hash.md5("eric.test@360learning.com"));
     }
     private void attemptLogin(final String email, final String pwd){
-        final Call<TokenResponse> call = apiToken.postAuth(email,pwd,true);
-        call.enqueue(new Callback<TokenResponse>() {
+        final Call<M3Server.TokenResponse> call = apiToken.postAuth(email,pwd,true);
+        call.enqueue(new Callback<M3Server.TokenResponse>() {
             @Override
-            public void onResponse(retrofit.Response<TokenResponse> responseCall, Retrofit retrofit) {
+            public void onResponse(retrofit.Response<M3Server.TokenResponse> responseCall, Retrofit retrofit) {
                 if (responseCall.body().getToken() != null) {
                     Log.d("TEST",responseCall.body().getToken());
                 }else{
