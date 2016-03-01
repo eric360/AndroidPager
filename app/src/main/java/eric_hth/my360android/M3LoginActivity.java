@@ -53,14 +53,20 @@ public class M3LoginActivity extends AppCompatActivity {
                 .build();
 
         apiToken = retrofitNoToken.create(TokenInterface.class);
-        attemptLogin("eric.test@360learning.com","eric.test@360learning.com");
+        attemptLogin("eric.test@360learning.com",Hash.md5("eric.test@360learning.com"));
     }
     private void attemptLogin(final String email, final String pwd){
         final Call<TokenResponse> call = apiToken.postAuth(email,pwd,true);
         call.enqueue(new Callback<TokenResponse>() {
             @Override
             public void onResponse(retrofit.Response<TokenResponse> responseCall, Retrofit retrofit) {
-                Log.d("TEST",responseCall.body().toString());
+
+                if (responseCall.body().getToken() != null) {
+                    Log.d("TEST",responseCall.body().getToken());
+                }else{
+                    Log.d("TEST","Erreur");
+                    Log.d("TEST",responseCall.body().getError().toString());
+                }
 /*                final TokenResponse response = responseCall.body();
                 if (response.getToken() != null) {
 
@@ -106,6 +112,7 @@ public class M3LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable t) {
+                Log.d("TEST","Failure");
                 //IO Exception
 //                t.printStackTrace();
 //                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
