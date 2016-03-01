@@ -10,6 +10,8 @@ import com.squareup.okhttp.OkHttpClient;
 import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
+
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -23,21 +25,20 @@ import retrofit.http.POST;
 public class M3Server {
     // MARK: public
     public static class Login {
-        public static void login(final String email, final String pwd){
+        interface LoginCompletion {
+            public void done(String token,LoggingError error);
+            public void error(Throwable t);
+        }
+        public static void login(final String email, final String pwd, final LoginCompletion completion){
             final Call<Login.TokenResponse> call = Login.logInInterface().postAuth(email,Login.MD5.process(pwd),true);
             call.enqueue(new Callback<TokenResponse>() {
                 @Override
                 public void onResponse(retrofit.Response<Login.TokenResponse> responseCall, Retrofit retrofit) {
-                    if (responseCall.body().getToken() != null) {
-                        Log.d("M3Server", responseCall.body().getToken());
-                    }else{
-                        Log.d("M3Server","Erreur");
-                        Log.d("M3Server",responseCall.body().getError().toString());
-                    }
+                    completion.done(responseCall.body().getToken(),responseCall.body().getError());
                 }
                 @Override
                 public void onFailure(Throwable t) {
-                    Log.d("M3Server","Failure");
+                    completion.error(t);
                 }
             });
         }

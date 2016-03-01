@@ -14,7 +14,16 @@ public class M3LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_m3_login);
-        M3Server.Login.login("eric.test@360learning.com", "eric.test@360learning.com");
+        M3Server.Login.login("eric.test@360learning.com", "eric.test@360learning.com", new M3Server.Login.LoginCompletion() {
+            @Override
+            public void done(String token, M3Server.LoggingError error) {
+                Log.d("TEST NEW", token);
+            }
+            @Override
+            public void error(Throwable t) {
+                Log.d("TEST NEW", t.toString());
+            }
+        });
     }
 
 }
