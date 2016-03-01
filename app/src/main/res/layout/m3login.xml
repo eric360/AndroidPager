@@ -6,6 +6,6 @@
     android:layout_height="match_parent" android:fitsSystemWindows="true"
     tools:context="eric_hth.my360android.M3LoginActivity">
 
-    <include layout="@layout/content_m3_login" />
+    <include layout="@layout/m3login_content" />
 
 </android.support.design.widget.CoordinatorLayout>
