@@ -19,7 +19,7 @@ public class M3PagerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.m3Pager);
+        setContentView(R.layout.m3pager);
         pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(pagerAdapter);
@@ -59,7 +59,7 @@ public class M3PagerActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater,
                                  ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(
-                    R.layout.m3Pager_Fragment, container, false);
+                    R.layout.m3pager_fragment, container, false);
             Bundle args = getArguments();
             ((TextView) rootView.findViewById(android.R.id.text1)).setText("" +
                     Integer.toString(args.getInt(ARG_OBJECT)));
