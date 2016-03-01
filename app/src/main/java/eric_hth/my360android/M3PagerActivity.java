@@ -4,7 +4,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -12,14 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class M3LoginActivity extends AppCompatActivity {
+public class M3PagerActivity extends AppCompatActivity {
     ViewPagerAdapter pagerAdapter;
     ViewPager pager;
     TabLayout tabLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.m3loginactivity);
+        setContentView(R.layout.m3Pager);
         pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(pagerAdapter);
@@ -28,7 +28,11 @@ public class M3LoginActivity extends AppCompatActivity {
     }
     // Since this is an object collection, use a FragmentStatePagerAdapter,
     // and NOT a FragmentPagerAdapter.
-    public class ViewPagerAdapter extends FragmentStatePagerAdapter {
+
+
+
+
+    public class ViewPagerAdapter extends FragmentPagerAdapter {
         public ViewPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -55,7 +59,7 @@ public class M3LoginActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater,
                                  ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(
-                    R.layout.fragment_collection_object, container, false);
+                    R.layout.m3Pager_Fragment, container, false);
             Bundle args = getArguments();
             ((TextView) rootView.findViewById(android.R.id.text1)).setText("" +
                     Integer.toString(args.getInt(ARG_OBJECT)));

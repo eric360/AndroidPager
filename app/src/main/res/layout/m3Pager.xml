@@ -6,6 +6,6 @@
     android:layout_height="match_parent" android:fitsSystemWindows="true"
     tools:context=".M3LoginActivity">
 
-    <include layout="@layout/m3loginactivity_content" />
+    <include layout="@layout/m3Pager_Content" />
 
 </android.support.design.widget.CoordinatorLayout>
