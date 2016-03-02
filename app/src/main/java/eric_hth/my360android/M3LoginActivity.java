@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.vstechlab.easyfonts.EasyFonts;
 
 public class M3LoginActivity extends AppCompatActivity {
@@ -17,6 +18,9 @@ public class M3LoginActivity extends AppCompatActivity {
         setContentView(R.layout.m3login);
         textView1 = (EditText) findViewById(R.id.textView);
         textView2 = (EditText)findViewById(R.id.textView2);
+        ShimmerFrameLayout container =
+                (ShimmerFrameLayout) findViewById(R.id.shimmer_view_container);
+        container.startShimmerAnimation();
         M3Server.Login.login("eric.test@360learning.com", "eric.test@360learning.com", new M3Server.Login.LoginCompletion() {
             @Override
             public void done(String token, M3Server.LoggingError error) {
