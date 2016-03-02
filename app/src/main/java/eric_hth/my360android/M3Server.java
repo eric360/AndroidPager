@@ -24,41 +24,52 @@ public class M3Server {
             public void error(Throwable t);
         }
         public static void login(final String email, final String pwd, final LoginCompletion completion){
-            final Call<Login.TokenResponse> call = Login.logInInterface().postAuth(email,Login.MD5.process(pwd),true);
-            call.enqueue(new Callback<TokenResponse>() {
+            logInRetrofit().login(email,md5(pwd),true).enqueue(new Callback<LogInRetrofitParser>() {
                 @Override
-                public void onResponse(retrofit.Response<Login.TokenResponse> responseCall, Retrofit retrofit) {
-                    completion.done(responseCall.body().getToken(),responseCall.body().getError());
+                public void onResponse(retrofit.Response<LogInRetrofitParser> responseCall, Retrofit retrofit) {
+                    completion.done(responseCall.body().getToken(), responseCall.body().getError());
                 }
+
                 @Override
                 public void onFailure(Throwable t) {
                     completion.error(t);
                 }
             });
         }
-        private static class MD5 {
-            public static final String process(final String s) {
-                final String MD5 = "MD5";
-                try {
-                    MessageDigest digest = java.security.MessageDigest
-                            .getInstance(MD5);
-                    digest.update(s.getBytes());
-                    byte messageDigest[] = digest.digest();
-                    StringBuilder hexString = new StringBuilder();
-                    for (byte aMessageDigest : messageDigest) {
-                        String h = Integer.toHexString(0xFF & aMessageDigest);
-                        while (h.length() < 2)
-                            h = "0" + h;
-                        hexString.append(h);
-                    }
-                    return hexString.toString();
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
+        private static final String md5(final String s) {
+            final String MD5 = "MD5";
+            try {
+                MessageDigest digest = java.security.MessageDigest
+                        .getInstance(MD5);
+                digest.update(s.getBytes());
+                byte messageDigest[] = digest.digest();
+                StringBuilder hexString = new StringBuilder();
+                for (byte aMessageDigest : messageDigest) {
+                    String h = Integer.toHexString(0xFF & aMessageDigest);
+                    while (h.length() < 2)
+                        h = "0" + h;
+                    hexString.append(h);
                 }
-                return "";
+                return hexString.toString();
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
             }
+            return "";
         }
-        private class TokenResponse implements Serializable {
+        private static LogInRetrofit logInRetrofit(){
+            Retrofit retrofitNoToken = new Retrofit.Builder()
+                    .baseUrl("http://app.360mooc.com")
+                    .client(new OkHttpClient())
+                    .addConverterFactory(GsonConverterFactory.create((new GsonBuilder()).create()))
+                    .build();
+            return retrofitNoToken.create(Login.LogInRetrofit.class);
+        }
+        private static interface LogInRetrofit {
+            @FormUrlEncoded
+            @POST("/api/tokens")
+            Call<LogInRetrofitParser> login(@Field("login") String login, @Field("password") String md5Pwd, @Field("mobile") boolean mobile);
+        }
+        private class LogInRetrofitParser implements Serializable {
             @SerializedName("token")
             @Expose
             private String token;
@@ -77,19 +88,6 @@ public class M3Server {
             public void setError(LoggingError error) {
                 this.error = error;
             }
-        }
-        private static TokenInterface logInInterface(){
-            Retrofit retrofitNoToken = new Retrofit.Builder()
-                    .baseUrl("http://app.360mooc.com")
-                    .client(new OkHttpClient())
-                    .addConverterFactory(GsonConverterFactory.create((new GsonBuilder()).create()))
-                    .build();
-            return retrofitNoToken.create(Login.TokenInterface.class);
-        }
-        private static interface TokenInterface {
-            @FormUrlEncoded
-            @POST("/api/tokens")
-            Call<TokenResponse> postAuth(@Field("login") String login, @Field("password") String md5Pwd, @Field("mobile") boolean mobile);
         }
     }
     // MARK: public var
