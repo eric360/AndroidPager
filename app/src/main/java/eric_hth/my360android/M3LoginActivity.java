@@ -19,6 +19,7 @@ public class M3LoginActivity extends AppCompatActivity {
     private ShimmerFrameLayout shimmer;
     private EditText editView1;
     private EditText editView2;
+    private FloatingActionButton button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +34,6 @@ public class M3LoginActivity extends AppCompatActivity {
                 shimmer.stopShimmerAnimation();
             }
         });
-
         editView2 = (EditText)findViewById(R.id.textView2);
         editView2.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -53,6 +53,7 @@ public class M3LoginActivity extends AppCompatActivity {
                     hideKeyboard(v);
                 }
             }
+
             public void hideKeyboard(View view) {
                 InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -71,12 +72,11 @@ public class M3LoginActivity extends AppCompatActivity {
         });
         title = (TextView)findViewById(R.id.title);
         title.setTypeface(EasyFonts.robotoThin(this));
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        button = (FloatingActionButton) findViewById(R.id.fab);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
             }
         });
     }
