@@ -20,6 +20,7 @@ public class M3LoginActivity extends AppCompatActivity {
         textView2 = (EditText)findViewById(R.id.textView2);
         ShimmerFrameLayout container =
                 (ShimmerFrameLayout) findViewById(R.id.shimmer_view_container);
+        container.setDuration(1000);
         container.startShimmerAnimation();
         M3Server.Login.login("eric.test@360learning.com", "eric.test@360learning.com", new M3Server.Login.LoginCompletion() {
             @Override
