@@ -2,6 +2,8 @@ package eric_hth.my360android;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -21,7 +23,17 @@ public class M3LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.m3login);
+        shimmer = (ShimmerFrameLayout) findViewById(R.id.shimmer_view_container);
+        shimmer.setDuration(1000);
+        shimmer.startShimmerAnimation();
         editView1 = (EditText) findViewById(R.id.textView);
+        editView1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                shimmer.stopShimmerAnimation();
+            }
+        });
+
         editView2 = (EditText)findViewById(R.id.textView2);
         editView2.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -36,7 +48,7 @@ public class M3LoginActivity extends AppCompatActivity {
         editView2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                Log.d("Test", hasFocus ? "yes" : "no");
+                shimmer.stopShimmerAnimation();
                 if (!hasFocus) {
                     hideKeyboard(v);
                 }
@@ -46,9 +58,6 @@ public class M3LoginActivity extends AppCompatActivity {
                 inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         });
-        shimmer = (ShimmerFrameLayout) findViewById(R.id.shimmer_view_container);
-        shimmer.setDuration(1000);
-        shimmer.startShimmerAnimation();
         M3Server.Login.login("eric.test@360learning.com", "eric.test@360learning.com", new M3Server.Login.LoginCompletion() {
             @Override
             public void done(String token, M3Server.LoggingError error) {
@@ -62,5 +71,13 @@ public class M3LoginActivity extends AppCompatActivity {
         });
         title = (TextView)findViewById(R.id.title);
         title.setTypeface(EasyFonts.robotoThin(this));
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
     }
 }
