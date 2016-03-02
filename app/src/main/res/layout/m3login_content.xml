@@ -42,6 +42,8 @@
         android:paddingRight="8dp"
         android:paddingTop="3dp"
         android:paddingBottom="3dp"
+        android:focusableInTouchMode="true"
+        android:descendantFocusability="beforeDescendants"
         >
         <EditText
             android:id="@+id/textView"
