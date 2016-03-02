@@ -1,8 +1,12 @@
 package eric_hth.my360android;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import com.vstechlab.easyfonts.EasyFonts;
 
 public class M3LoginActivity extends AppCompatActivity {
     EditText textView1;
@@ -23,6 +27,8 @@ public class M3LoginActivity extends AppCompatActivity {
                 Log.d("TEST NEW", t.toString());
             }
         });
+        TextView myTextView = (TextView)findViewById(R.id.title);
+        myTextView.setTypeface(EasyFonts.robotoThin(this));
     }
 
 }
