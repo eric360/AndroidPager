@@ -35,15 +35,15 @@ public class M3UserRecyclerView extends RecyclerView {
     }
     // MARK: private classes
     private class SHomeViewHolder extends RecyclerView.ViewHolder{
+        // MARK: public var
+        public TextView textView;
+        public ImageView imageView;
         // MARK: SHomeViewHolder()
         public SHomeViewHolder(View view){
             super(view);
             textView = (TextView) view.findViewById(R.id.textView);
             imageView = (ImageView) view.findViewById(R.id.imageView);
         }
-        // MARK: public var
-        public TextView textView;
-        public ImageView imageView;
     }
     private class SHomeAdapter extends RecyclerView.Adapter{
         // MARK: private var
