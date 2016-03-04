@@ -11,17 +11,13 @@ import com.squareup.okhttp.OkHttpClient;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Map;
 
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
-import retrofit.http.Field;
-import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
-import retrofit.http.POST;
 import retrofit.http.Query;
 
 public class M3UserActivity extends AppCompatActivity {
@@ -29,30 +25,40 @@ public class M3UserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.m3user);
-        Log.d("Token", getIntent().getExtras().getString("token"));
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://app.360mooc.com")
-                .client(new OkHttpClient())
-                .addConverterFactory(GsonConverterFactory.create((new GsonBuilder()).create()))
-                .build();
-        UserRetrofit usersCall = retrofit.create(UserRetrofit.class);
-        usersCall.testGet(getIntent().getExtras().getString("token")).enqueue(new Callback<HomeObject>() {
+        UserServerInterface userServerInterface = userServerInterface();
+        userServerInterface.getHome(getIntent().getExtras().getString("token")).enqueue(new Callback<HomeObject>() {
             @Override
             public void onResponse(Response<HomeObject> response, Retrofit retrofit) {
                 Log.d("Test", response.body().users.toString());
             }
             @Override
             public void onFailure(Throwable t) {
+            }
+        });
+        userServerInterface.getUsers(getIntent().getExtras().getString("token")).enqueue(new Callback<ArrayList<IdObject>>() {
+            @Override
+            public void onResponse(Response<ArrayList<IdObject>> response, Retrofit retrofit) {
+                Log.d("Test", response.body().toString());
+            }
+            @Override
+            public void onFailure(Throwable t) {
 
             }
         });
-
     }
-    private static interface UserRetrofit {
+    private static   UserServerInterface userServerInterface(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://app.360mooc.com")
+                .client(new OkHttpClient())
+                .addConverterFactory(GsonConverterFactory.create((new GsonBuilder()).create()))
+                .build();
+        return retrofit.create(UserServerInterface.class);
+    }
+    private static interface UserServerInterface {
         @GET("/api/users/")
-        Call<ArrayList<IdObject>> getAllUsersId(@Query("token") String token);
+        Call<ArrayList<IdObject>> getUsers(@Query("token") String token);
         @GET("/api/home/")
-        Call<HomeObject> testGet(@Query("token") String token);
+        Call<HomeObject> getHome(@Query("token") String token);
     }
     public class IdObject implements Serializable {
         @SerializedName("_id")
