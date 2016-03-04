@@ -38,12 +38,13 @@ public class M3UserActivity extends AppCompatActivity {
                 for(IdObject  object : response.body() ){
                     list.add(object.id);
                 }
-                userServerInterface.getUsers(list,getIntent().getExtras().getString("token")).enqueue(new Callback<Map<String,IdObject>>() {
+                userServerInterface.getUsers(list,getIntent().getExtras().getString("token")).enqueue(new Callback<Map<String,User>>() {
                     @Override
-                    public void onResponse(Response<Map<String,IdObject>> response, Retrofit retrofit) {
-                        List<IdObject> list = new ArrayList<IdObject>(response.body().values());
-                        for(IdObject  object : list ){
+                    public void onResponse(Response<Map<String,User>> response, Retrofit retrofit) {
+                        List<User> users = new ArrayList<User>(response.body().values());
+                        for(User  object : users ){
                             Log.d("USER ID", object.id);
+                            Log.d("USER NAME", object.name);
                         }
                     }
                     @Override
@@ -71,7 +72,7 @@ public class M3UserActivity extends AppCompatActivity {
         Call<HomeObject> getHome(@Query("token") String token);
         @FormUrlEncoded
         @POST("/api/users/widgets")
-        Call<Map<String,IdObject>> getUsers(@Field("ids[]") List<String> ids,@Query("token") String token);
+        Call<Map<String,User>> getUsers(@Field("ids[]") List<String> ids,@Query("token") String token);
     }
     public class IdObject implements Serializable {
         @SerializedName("_id")
@@ -82,6 +83,26 @@ public class M3UserActivity extends AppCompatActivity {
         }
         public void setId(String id) {
             this.id = id;
+        }
+    }
+    public class User implements Serializable {
+        @SerializedName("_id")
+        @Expose
+        private String id;
+        public String getId() {
+            return id;
+        }
+        public void setId(String id) {
+            this.id = id;
+        }
+        @SerializedName("name")
+        @Expose
+        private String name;
+        public String getName() {
+            return name;
+        }
+        public void setName(String name) {
+            this.name = name;
         }
     }
     public class HomeObject implements Serializable {
