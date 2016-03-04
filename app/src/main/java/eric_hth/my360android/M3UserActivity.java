@@ -107,19 +107,3 @@ public class M3UserActivity extends AppCompatActivity {
         }
     }
 }
-
-
-//let url = M3Url.url("/api/users/widgets?token=%@")
-//M3Server.get(url, method: "POST", htmlBody: self.htmlPostDataWithIds(userIds), completion: { (data, apiResponse, serverResponse) -> Void in
-//        if(apiResponse == M3ServerApiResponse.Success)
-//        {
-//        if let userList = data?.allValues as? [NSDictionary]{
-//        let userDictionary = self.userDictionaryWithUserList(userList)
-//        completion(response:M3ServerApiResponse.Success, users: userDictionary)
-//        }
-//        }
-//        else
-//        {
-//        completion(response: apiResponse,users:nil)
-//        }
-//        })
