@@ -32,19 +32,19 @@ public class M3UserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.m3user);
         recyclerView = (M3UserRecyclerView) findViewById(R.id.recycler);
-        final UserServerInterface userServerInterface = userServerInterface();
-        userServerInterface.getUsersId(getIntent().getExtras().getString("token")).enqueue(new Callback<ArrayList<IdObject>>() {
+        final M3ObjectInterface userServerInterface = m3ObjectInterface();
+        userServerInterface.getUsersId(getIntent().getExtras().getString("token")).enqueue(new Callback<ArrayList<M3Object>>() {
             @Override
-            public void onResponse(Response<ArrayList<IdObject>> response, Retrofit retrofit) {
+            public void onResponse(Response<ArrayList<M3Object>> response, Retrofit retrofit) {
                 ArrayList<String> list = new ArrayList<String>();
-                for(IdObject  object : response.body() ){
+                for(M3Object  object : response.body() ){
                     list.add(object.id);
                 }
-                userServerInterface.getUsers(list,getIntent().getExtras().getString("token")).enqueue(new Callback<Map<String,User>>() {
+                userServerInterface.getUsers(list,getIntent().getExtras().getString("token")).enqueue(new Callback<Map<String,M3UserWidgets>>() {
                     @Override
-                    public void onResponse(Response<Map<String,User>> response, Retrofit retrofit) {
-                        List<User> users = new ArrayList<User>(response.body().values());
-                        for(User  object : users ){
+                    public void onResponse(Response<Map<String,M3UserWidgets>> response, Retrofit retrofit) {
+                        List<M3UserWidgets> users = new ArrayList<M3UserWidgets>(response.body().values());
+                        for(M3UserWidgets  object : users ){
                             recyclerView.loadData(users);
                         }
                     }
@@ -57,25 +57,37 @@ public class M3UserActivity extends AppCompatActivity {
             public void onFailure(Throwable t) {
             }
         });
+        userServerInterface.getUserMe(getIntent().getExtras().getString("token")).enqueue(new Callback<M3User>() {
+            @Override
+            public void onResponse(Response<M3User> response, Retrofit retrofit) {
+                Log.d("Test Get Me",response.body().companies.get(0));
+            }
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
     }
-    private static   UserServerInterface userServerInterface(){
+    private static M3ObjectInterface m3ObjectInterface(){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://app.360mooc.com")
                 .client(new OkHttpClient())
                 .addConverterFactory(GsonConverterFactory.create((new GsonBuilder()).create()))
                 .build();
-        return retrofit.create(UserServerInterface.class);
+        return retrofit.create(M3ObjectInterface.class);
     }
-    private static interface UserServerInterface {
+    private static interface M3ObjectInterface {
         @GET("/api/users/")
-        Call<ArrayList<IdObject>> getUsersId(@Query("token") String token);
+        Call<ArrayList<M3Object>> getUsersId(@Query("token") String token);
         @GET("/api/home/")
-        Call<HomeObject> getHome(@Query("token") String token);
+        Call<M3HomeObject> getHome(@Query("token") String token);
+        @GET("/api/users/me")
+        Call<M3User> getUserMe(@Query("token") String token);
         @FormUrlEncoded
         @POST("/api/users/widgets")
-        Call<Map<String,User>> getUsers(@Field("ids[]") List<String> ids,@Query("token") String token);
+        Call<Map<String,M3UserWidgets>> getUsers(@Field("ids[]") List<String> ids,@Query("token") String token);
     }
-    public class IdObject implements Serializable {
+    public class M3Object implements Serializable {
         @SerializedName("_id")
         @Expose
         private String id;
@@ -86,7 +98,7 @@ public class M3UserActivity extends AppCompatActivity {
             this.id = id;
         }
     }
-    public class User implements Serializable {
+    public class M3UserWidgets implements Serializable {
         @SerializedName("_id")
         @Expose
         private String id;
@@ -106,26 +118,26 @@ public class M3UserActivity extends AppCompatActivity {
             this.name = name;
         }
     }
-    public class HomeObject implements Serializable {
+    public class M3User extends M3UserWidgets{
+        @SerializedName("companies")
+        @Expose
+        private ArrayList<String> companies;
+        public ArrayList<String> getCompanies() {
+            return companies;
+        }
+        public void setCompanies(ArrayList<String> companies) {
+            this.companies = companies;
+        }
+    }
+    public class M3HomeObject implements Serializable {
         @SerializedName("staff")
         @Expose
-        private ArrayList<Users> users;
-        public ArrayList<Users> getUsers() {
+        private ArrayList<M3Object> users;
+        public ArrayList<M3Object> getUsers() {
             return users;
         }
-        public void setUsers(ArrayList<Users> users) {
+        public void setUsers(ArrayList<M3Object> users) {
             this.users = users;
-        }
-        public class Users {
-            @SerializedName("_id")
-            @Expose
-            private String id;
-            public String getRows() {
-                return id;
-            }
-            public void setRows(String rows) {
-                this.id = id;
-            }
         }
     }
 }

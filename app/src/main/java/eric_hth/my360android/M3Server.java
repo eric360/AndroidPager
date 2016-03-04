@@ -64,6 +64,7 @@ public class M3Server {
                     .build();
             return retrofitNoToken.create(Login.LogInRetrofit.class);
         }
+        // M3Url.url("/api/users/me?token=%@")
         private static interface LogInRetrofit {
             @FormUrlEncoded
             @POST("/api/tokens")

@@ -20,7 +20,7 @@ import java.util.List;
 public class M3UserRecyclerView extends RecyclerView {
     // MARK: private var
     private SHomeAdapter adapter;
-    private List<M3UserActivity.User> objects;
+    private List<M3UserActivity.UserWidgets> objects;
     // MARK: SHomeRecycler()
     public M3UserRecyclerView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -29,7 +29,7 @@ public class M3UserRecyclerView extends RecyclerView {
         setAdapter(adapter);
     }
     // MARK: public
-    public void loadData(List<M3UserActivity.User> objects){
+    public void loadData(List<M3UserActivity.UserWidgets> objects){
         this.objects = objects;
         adapter.loadData(objects);
     }
@@ -47,9 +47,9 @@ public class M3UserRecyclerView extends RecyclerView {
     }
     private class SHomeAdapter extends RecyclerView.Adapter{
         // MARK: private var
-        private List<M3UserActivity.User> data;
+        private List<M3UserActivity.UserWidgets> data;
         // MARK: public
-        public void loadData(List<M3UserActivity.User> objects){
+        public void loadData(List<M3UserActivity.UserWidgets> objects){
             this.data = objects;
             this.notifyDataSetChanged();
         }
