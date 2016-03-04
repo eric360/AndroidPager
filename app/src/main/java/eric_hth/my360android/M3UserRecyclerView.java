@@ -7,7 +7,10 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -36,9 +39,11 @@ public class M3UserRecyclerView extends RecyclerView {
         public SHomeViewHolder(View view){
             super(view);
             textView = (TextView) view.findViewById(R.id.textView);
+            imageView = (ImageView) view.findViewById(R.id.imageView);
         }
         // MARK: public var
         public TextView textView;
+        public ImageView imageView;
     }
     private class SHomeAdapter extends RecyclerView.Adapter{
         // MARK: private var
@@ -58,6 +63,7 @@ public class M3UserRecyclerView extends RecyclerView {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             SHomeViewHolder viewHolder = (SHomeViewHolder) holder;
             viewHolder.textView.setText(data.get(position).getName());
+            Picasso.with(viewHolder.imageView.getContext()).load("http://www.google.fr/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png").into(viewHolder.imageView);
         }
         @Override
         public int getItemCount() {
