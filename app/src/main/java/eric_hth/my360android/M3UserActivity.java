@@ -38,10 +38,13 @@ public class M3UserActivity extends AppCompatActivity {
                 for(IdObject  object : response.body() ){
                     list.add(object.id);
                 }
-                userServerInterface.getUsers(list,getIntent().getExtras().getString("token")).enqueue(new Callback<Object>() {
+                userServerInterface.getUsers(list,getIntent().getExtras().getString("token")).enqueue(new Callback<Map<String,IdObject>>() {
                     @Override
-                    public void onResponse(Response<Object> response, Retrofit retrofit) {
-                        Log.d("Result - Users Dictionary", response.body().toString());
+                    public void onResponse(Response<Map<String,IdObject>> response, Retrofit retrofit) {
+                        List<IdObject> list = new ArrayList<IdObject>(response.body().values());
+                        for(IdObject  object : list ){
+                            Log.d("USER ID", object.id);
+                        }
                     }
                     @Override
                     public void onFailure(Throwable t) {
@@ -50,7 +53,6 @@ public class M3UserActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Throwable t) {
-
             }
         });
     }
@@ -69,7 +71,7 @@ public class M3UserActivity extends AppCompatActivity {
         Call<HomeObject> getHome(@Query("token") String token);
         @FormUrlEncoded
         @POST("/api/users/widgets")
-        Call<Object> getUsers(@Field("ids[]") List<String> ids,@Query("token") String token);
+        Call<Map<String,IdObject>> getUsers(@Field("ids[]") List<String> ids,@Query("token") String token);
     }
     public class IdObject implements Serializable {
         @SerializedName("_id")
