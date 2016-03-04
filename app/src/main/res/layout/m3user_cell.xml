@@ -8,6 +8,8 @@
         android:id="@+id/imageView"
         android:src="@drawable/m3launchscreen"
         android:background="@color/blue360"
+        android:layout_marginBottom="4dp"
+        android:layout_marginRight="4dp"
         />
     <TextView
         android:background="?android:attr/selectableItemBackground"
