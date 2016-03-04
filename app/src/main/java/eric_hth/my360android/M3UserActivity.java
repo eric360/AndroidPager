@@ -11,6 +11,7 @@ import com.squareup.okhttp.OkHttpClient;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Map;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -35,12 +36,10 @@ public class M3UserActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create((new GsonBuilder()).create()))
                 .build();
         UserRetrofit usersCall = retrofit.create(UserRetrofit.class);
-        usersCall.getAllUsersId(getIntent().getExtras().getString("token")).enqueue(new Callback<ArrayList<IdObject>>() {
+        usersCall.testGet(getIntent().getExtras().getString("token")).enqueue(new Callback<HomeObject>() {
             @Override
-            public void onResponse(Response<ArrayList<IdObject>> response, Retrofit retrofit) {
-                for (IdObject user : response.body()) {
-                    Log.d("Test",user.id);
-                }
+            public void onResponse(Response<HomeObject> response, Retrofit retrofit) {
+                Log.d("Test", response.body().users.toString());
             }
             @Override
             public void onFailure(Throwable t) {
@@ -52,6 +51,8 @@ public class M3UserActivity extends AppCompatActivity {
     private static interface UserRetrofit {
         @GET("/api/users/")
         Call<ArrayList<IdObject>> getAllUsersId(@Query("token") String token);
+        @GET("/api/home/")
+        Call<HomeObject> testGet(@Query("token") String token);
     }
     public class IdObject implements Serializable {
         @SerializedName("_id")
@@ -64,6 +65,50 @@ public class M3UserActivity extends AppCompatActivity {
             this.id = id;
         }
     }
+    public class HomeObject implements Serializable {
+        @SerializedName("staff")
+        @Expose
+        private ArrayList<Users> users;
+        public ArrayList<Users> getUsers() {
+            return users;
+        }
+        public void setUsers(ArrayList<Users> users) {
+            this.users = users;
+        }
+        public class Users {
+            @SerializedName("_id")
+            @Expose
+            private String id;
+            public String getRows() {
+                return id;
+            }
+            public void setRows(String rows) {
+                this.id = id;
+            }
+        }
+    }
+//    public class HomeObject implements Serializable {
+//        @SerializedName("users")
+//        @Expose
+//        private Users users;
+//        public Users getUsers() {
+//            return users;
+//        }
+//        public void setUsers(Users users) {
+//            this.users = users;
+//        }
+//        public class Users {
+//            @SerializedName("rows")
+//            @Expose
+//            private ArrayList<String> rows;
+//            public ArrayList<String> getRows() {
+//                return rows;
+//            }
+//            public void setRows(ArrayList<String> rows) {
+//                this.rows = rows;
+//            }
+//        }
+//    }
 }
 
 
