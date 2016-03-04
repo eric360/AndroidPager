@@ -11,13 +11,18 @@ import com.squareup.okhttp.OkHttpClient;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
+import retrofit.http.Field;
+import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
+import retrofit.http.POST;
 import retrofit.http.Query;
 
 public class M3UserActivity extends AppCompatActivity {
@@ -25,20 +30,23 @@ public class M3UserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.m3user);
-        UserServerInterface userServerInterface = userServerInterface();
-        userServerInterface.getHome(getIntent().getExtras().getString("token")).enqueue(new Callback<HomeObject>() {
-            @Override
-            public void onResponse(Response<HomeObject> response, Retrofit retrofit) {
-                Log.d("Test", response.body().users.toString());
-            }
-            @Override
-            public void onFailure(Throwable t) {
-            }
-        });
-        userServerInterface.getUsers(getIntent().getExtras().getString("token")).enqueue(new Callback<ArrayList<IdObject>>() {
+        final UserServerInterface userServerInterface = userServerInterface();
+        userServerInterface.getUsersId(getIntent().getExtras().getString("token")).enqueue(new Callback<ArrayList<IdObject>>() {
             @Override
             public void onResponse(Response<ArrayList<IdObject>> response, Retrofit retrofit) {
-                Log.d("Test", response.body().toString());
+                ArrayList<String> list = new ArrayList<String>();
+                for(IdObject  object : response.body() ){
+                    list.add(object.id);
+                }
+                userServerInterface.getUsers(list,getIntent().getExtras().getString("token")).enqueue(new Callback<Object>() {
+                    @Override
+                    public void onResponse(Response<Object> response, Retrofit retrofit) {
+                        Log.d("Result - Users Dictionary", response.body().toString());
+                    }
+                    @Override
+                    public void onFailure(Throwable t) {
+                    }
+                });
             }
             @Override
             public void onFailure(Throwable t) {
@@ -56,9 +64,12 @@ public class M3UserActivity extends AppCompatActivity {
     }
     private static interface UserServerInterface {
         @GET("/api/users/")
-        Call<ArrayList<IdObject>> getUsers(@Query("token") String token);
+        Call<ArrayList<IdObject>> getUsersId(@Query("token") String token);
         @GET("/api/home/")
         Call<HomeObject> getHome(@Query("token") String token);
+        @FormUrlEncoded
+        @POST("/api/users/widgets")
+        Call<Object> getUsers(@Field("ids[]") List<String> ids,@Query("token") String token);
     }
     public class IdObject implements Serializable {
         @SerializedName("_id")
@@ -93,80 +104,20 @@ public class M3UserActivity extends AppCompatActivity {
             }
         }
     }
-//    public class HomeObject implements Serializable {
-//        @SerializedName("users")
-//        @Expose
-//        private Users users;
-//        public Users getUsers() {
-//            return users;
-//        }
-//        public void setUsers(Users users) {
-//            this.users = users;
-//        }
-//        public class Users {
-//            @SerializedName("rows")
-//            @Expose
-//            private ArrayList<String> rows;
-//            public ArrayList<String> getRows() {
-//                return rows;
-//            }
-//            public void setRows(ArrayList<String> rows) {
-//                this.rows = rows;
-//            }
-//        }
-//    }
 }
 
 
-//    logInRetrofit().login(email,md5(pwd),true).enqueue(new Callback<LogInRetrofitParser>() {
-//@Override
-//public void onResponse(retrofit.Response<LogInRetrofitParser> responseCall, Retrofit retrofit) {
-//        completion.done(responseCall.body().getToken(), responseCall.body().getError());
+//let url = M3Url.url("/api/users/widgets?token=%@")
+//M3Server.get(url, method: "POST", htmlBody: self.htmlPostDataWithIds(userIds), completion: { (data, apiResponse, serverResponse) -> Void in
+//        if(apiResponse == M3ServerApiResponse.Success)
+//        {
+//        if let userList = data?.allValues as? [NSDictionary]{
+//        let userDictionary = self.userDictionaryWithUserList(userList)
+//        completion(response:M3ServerApiResponse.Success, users: userDictionary)
 //        }
-//
-//@Override
-//public void onFailure(Throwable t) {
-//        completion.error(t);
 //        }
-//        });
-
-//    @GET("/api/users/")
-//    Call<ArrayList<IdObject>> getAllUsersId();
-
-//"/api/users/me?token=%@"
-
-/*
-private static LogInRetrofit logInRetrofit(){
-    Retrofit retrofitNoToken = new Retrofit.Builder()
-            .baseUrl("http://app.360mooc.com")
-            .client(new OkHttpClient())
-            .addConverterFactory(GsonConverterFactory.create((new GsonBuilder()).create()))
-            .build();
-    return retrofitNoToken.create(Login.LogInRetrofit.class);
-}
-private static interface LogInRetrofit {
-    @FormUrlEncoded
-    @POST("/api/tokens")
-    Call<LogInRetrofitParser> login(@Field("login") String login, @Field("password") String md5Pwd, @Field("mobile") boolean mobile);
-}
-private class LogInRetrofitParser implements Serializable {
-    @SerializedName("token")
-    @Expose
-    private String token;
-    @SerializedName("error")
-    @Expose
-    private LoggingError error;
-    public String getToken() {
-        return token;
-    }
-    public void setToken(String token) {
-        this.token = token;
-    }
-    public LoggingError getError() {
-        return error;
-    }
-    public void setError(LoggingError error) {
-        this.error = error;
-    }
-}
-*/
+//        else
+//        {
+//        completion(response: apiResponse,users:nil)
+//        }
+//        })
