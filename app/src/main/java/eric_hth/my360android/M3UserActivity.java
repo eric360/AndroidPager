@@ -26,10 +26,12 @@ import retrofit.http.POST;
 import retrofit.http.Query;
 
 public class M3UserActivity extends AppCompatActivity {
+    private M3UserRecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.m3user);
+        recyclerView = (M3UserRecyclerView) findViewById(R.id.recycler);
         final UserServerInterface userServerInterface = userServerInterface();
         userServerInterface.getUsersId(getIntent().getExtras().getString("token")).enqueue(new Callback<ArrayList<IdObject>>() {
             @Override
@@ -43,8 +45,7 @@ public class M3UserActivity extends AppCompatActivity {
                     public void onResponse(Response<Map<String,User>> response, Retrofit retrofit) {
                         List<User> users = new ArrayList<User>(response.body().values());
                         for(User  object : users ){
-                            Log.d("USER ID", object.id);
-                            Log.d("USER NAME", object.name);
+                            recyclerView.loadData(users);
                         }
                     }
                     @Override
