@@ -15,12 +15,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.vstechlab.easyfonts.EasyFonts;
+
+import retrofit.Callback;
+import retrofit.Response;
+import retrofit.Retrofit;
+
 public class M3LoginActivity extends AppCompatActivity {
     private TextView title;
     private ShimmerFrameLayout shimmer;
     private EditText editView1;
     private EditText editView2;
     private FloatingActionButton button;
+    public static String company;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,10 +74,19 @@ public class M3LoginActivity extends AppCompatActivity {
             public void onClick(final View view) {
                 M3Server.Login.login("eric.test@360learning.com", "eric.test@360learning.com", new M3Server.Login.LoginCompletion() {
                     @Override
-                    public void done(String token, M3Server.LoggingError error) {
-                        Intent i = new Intent(view.getContext(), M3UserActivity.class);
-                        i.putExtra("token", token);
-                        startActivity(i);
+                    public void done(final String token, M3Server.LoggingError error) {
+                        M3Server.getMe(token, new Callback<M3Server.M3User>() {
+                            @Override
+                            public void onResponse(Response<M3Server.M3User> response, Retrofit retrofit) {
+                                Intent i = new Intent(view.getContext(), M3UserActivity.class);
+                                i.putExtra("token", token);
+                                M3LoginActivity.company = response.body().getCompanies().get(0);
+                                startActivity(i);
+                            }
+                            @Override
+                            public void onFailure(Throwable t) {
+                            }
+                        });
                     }
                     @Override
                     public void error(Throwable t) {

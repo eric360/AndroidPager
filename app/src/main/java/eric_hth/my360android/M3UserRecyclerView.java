@@ -63,7 +63,8 @@ public class M3UserRecyclerView extends RecyclerView {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             SHomeViewHolder viewHolder = (SHomeViewHolder) holder;
             viewHolder.textView.setText(data.get(position).getName());
-            Picasso.with(viewHolder.imageView.getContext()).load("http://www.google.fr/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png").into(viewHolder.imageView);
+            String urlBis = "http://app.360mooc.com/api/medias/user/" + data.get(position).getId() + "?thumbnail=true&company=" + M3LoginActivity.company;
+            Picasso.with(viewHolder.imageView.getContext()).load(urlBis).into(viewHolder.imageView);
         }
         @Override
         public int getItemCount() {

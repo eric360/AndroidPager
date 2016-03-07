@@ -43,15 +43,5 @@ public class M3UserActivity extends AppCompatActivity {
             public void onFailure(Throwable t) {
             }
         });
-        M3Server.getMe(getIntent().getExtras().getString("token"), new Callback<M3Server.M3User>() {
-            @Override
-            public void onResponse(Response<M3Server.M3User> response, Retrofit retrofit) {
-                Log.d("Test Get Me", response.body().getCompanies().get(0));
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-            }
-        });
     }
 }
