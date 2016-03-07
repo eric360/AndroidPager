@@ -33,15 +33,6 @@ public class M3UserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.m3user);
-        M3Server.getUsers(getIntent().getExtras().getString("token"), new Callback<Map<String, M3Server.M3UserWidgets>>() {
-            @Override
-            public void onResponse(Response<Map<String, M3Server.M3UserWidgets>> response, Retrofit retrofit) {
-                List<M3Server.M3UserWidgets> users = new ArrayList<M3Server.M3UserWidgets>(response.body().values());
-            }
-            @Override
-            public void onFailure(Throwable t) {
-            }
-        });
         loadFragment();
     }
     protected void loadFragment(){
