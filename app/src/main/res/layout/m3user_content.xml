@@ -8,6 +8,10 @@
     android:paddingBottom="0dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_m3_user" tools:context="eric_hth.my360android.M3UserActivity">
-    <eric_hth.my360android.M3UserRecyclerView android:id="@+id/recycler" android:layout_height="match_parent" android:layout_width="match_parent" android:paddingTop="5dp">
-    </eric_hth.my360android.M3UserRecyclerView>>
+    <!--<eric_hth.my360android.M3UserRecyclerView android:id="@+id/recycler" android:layout_height="match_parent" android:layout_width="match_parent" android:paddingTop="5dp">-->
+    <!--</eric_hth.my360android.M3UserRecyclerView>>-->
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent" android:layout_height="match_parent" android:id="@+id/fragment">
+    </FrameLayout>
 </RelativeLayout>

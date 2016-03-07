@@ -1,6 +1,9 @@
 package eric_hth.my360android;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -26,22 +29,31 @@ import retrofit.http.POST;
 import retrofit.http.Query;
 
 public class M3UserActivity extends AppCompatActivity {
-    private M3UserRecyclerView recyclerView;
+//    private M3UserRecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.m3user);
-        recyclerView = (M3UserRecyclerView) findViewById(R.id.recycler);
+//        recyclerView = (M3UserRecyclerView) findViewById(R.id.recycler);
         M3Server.getUsers(getIntent().getExtras().getString("token"), new Callback<Map<String, M3Server.M3UserWidgets>>() {
             @Override
             public void onResponse(Response<Map<String, M3Server.M3UserWidgets>> response, Retrofit retrofit) {
                 List<M3Server.M3UserWidgets> users = new ArrayList<M3Server.M3UserWidgets>(response.body().values());
-                recyclerView.loadData(users);
+//                recyclerView.loadData(users);
             }
 
             @Override
             public void onFailure(Throwable t) {
             }
         });
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentByTag("post");
+        if(fragment==null) {
+            fragment = M3UserRecyclerFragment.newInstance();
+        }
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragment, fragment, "post");
+        transaction.commit();
+
     }
 }
