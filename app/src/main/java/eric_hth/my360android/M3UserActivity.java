@@ -57,7 +57,7 @@ public class M3UserActivity extends AppCompatActivity {
         }
         @Override
         public Fragment getItem(int i) {
-            if(i == 2){
+            if(i == 1){
                 return fragment;
             }
             Fragment fragment = new ViewPagerFragment();
@@ -68,11 +68,17 @@ public class M3UserActivity extends AppCompatActivity {
         }
         @Override
         public int getCount() {
-            return 5;
+            return 2;
         }
         @Override
         public CharSequence getPageTitle(int position) {
-            return "" + (position + 1);
+            if(position == 0){
+                return "Home";
+            }
+            else if(position == 1){
+                return "Users";
+            }
+            return "";
         }
     }
     public static class ViewPagerFragment extends Fragment {
