@@ -26,7 +26,7 @@ public class M3PagerActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(pager);
     }
-    public class ViewPagerAdapter extends FragmentPagerAdapter {
+    private class ViewPagerAdapter extends FragmentPagerAdapter {
         public ViewPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -47,7 +47,7 @@ public class M3PagerActivity extends AppCompatActivity {
             return "" + (position + 1);
         }
     }
-    public static class ViewPagerFragment extends Fragment {
+    private static class ViewPagerFragment extends Fragment {
         public static final String ARG_OBJECT = "object";
         @Override
         public View onCreateView(LayoutInflater inflater,
