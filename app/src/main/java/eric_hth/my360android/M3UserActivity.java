@@ -29,31 +29,29 @@ import retrofit.http.POST;
 import retrofit.http.Query;
 
 public class M3UserActivity extends AppCompatActivity {
-//    private M3UserRecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.m3user);
-//        recyclerView = (M3UserRecyclerView) findViewById(R.id.recycler);
         M3Server.getUsers(getIntent().getExtras().getString("token"), new Callback<Map<String, M3Server.M3UserWidgets>>() {
             @Override
             public void onResponse(Response<Map<String, M3Server.M3UserWidgets>> response, Retrofit retrofit) {
                 List<M3Server.M3UserWidgets> users = new ArrayList<M3Server.M3UserWidgets>(response.body().values());
-//                recyclerView.loadData(users);
             }
-
             @Override
             public void onFailure(Throwable t) {
             }
         });
+        loadFragment();
+    }
+    protected void loadFragment(){
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentByTag("post");
         if(fragment==null) {
-            fragment = M3UserRecyclerFragment.newInstance();
+            fragment = new M3UserRecyclerFragment();
         }
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragment, fragment, "post");
         transaction.commit();
-
     }
 }
