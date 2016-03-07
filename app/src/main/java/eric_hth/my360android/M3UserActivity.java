@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -52,8 +54,7 @@ public class M3UserActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(pager);
         fragment = new M3UserRecyclerFragment();
 
-        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(mActionBarToolbar);
+        setSupportActionBar((Toolbar) findViewById(R.id.my_toolbar));
         getSupportActionBar().setTitle("Stack");
     }
     public class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -99,6 +100,13 @@ public class M3UserActivity extends AppCompatActivity {
             return rootView;
         }
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.m3user_menu, menu);
+        return true;
+    }
+
 //    protected void loadFragment(){
 //        FragmentManager fragmentManager = getSupportFragmentManager();
 //        Fragment fragment = fragmentManager.findFragmentByTag("post");
